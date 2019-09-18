@@ -13,50 +13,72 @@ namespace LIHunter
         public string ChromeDriverRelativePath = (Directory.GetCurrentDirectory().Split("LIHunter"))[0] + @"\LIHunter\chromedriver_win32";
         public string UserName { get; set; }
         public string Password { get; set; }
-
-        public string BaseURL { get; set; }
+        public string BaseURL { get {return @"https://www.linkedin.com/jobs/search?keywords=";}}
         public string BaseSearchParams { get; set; }
         public string AdvancedSearchParams { get; set; }
         public string FULLURL { get; set; }
-
         public IWebDriver Driver { get; set; }
+        public List<Job> JobResults { get; set; } = new List<Job>();
 
-        public LIService()
+
+        public LIService(string keywords, string city, string state)
         {
-            //Construct search string
-            BaseURL = @"https://www.linkedin.com/jobs/search?keywords=";
-
             //TODO: Replace the static string with dynamic values 
+            /*
             setBaseSearchParams("Software Engineer", "Chicago", "Illinois");
-            setAdvancedSearchParams(new string[2] { "fulltime", "contract" }, new string[2] { "entry", "associate" }, "day");
+            setAdvancedSearchParams(new string[1] {"contract" }, new string[1] { "entry" }, "day");
+            */
+            setBaseSearchParams("Software Engineer", "Chicago", "Illinois");
+            FULLURL = BaseURL + BaseSearchParams;
+            searchLI(FULLURL);
+        }
+
+        public LIService(string keywords, string city, string state, string[] jobtitles, string[] experiences, string timesposted)
+        {
+            setBaseSearchParams("Software Engineer", "Chicago", "Illinois");
+            setAdvancedSearchParams(new string[1] {"contract" }, new string[1] { "entry" }, "day");
             FULLURL = BaseURL + BaseSearchParams + AdvancedSearchParams;
+            searchLI(FULLURL);
+        }
 
-            Driver = new ChromeDriver(ChromeDriverRelativePath);         
-            Driver.Navigate().GoToUrl(FULLURL);
-            //https://www.linkedin.com/jobs/search?keywords=Software%20Engineer&location=Chicago%2C%20Illinois%2C%20United%20States&&f_JT=F%2CC&f_E=2%2C3&f_TP=1
 
+        public void searchLI(string url)
+        {
+            Driver = new ChromeDriver(ChromeDriverRelativePath);
+            Driver.Navigate().GoToUrl(url);
 
             IWebElement element;
             long scrollHeight = 0;
 
-            do {
-                //TODO:Scrape all relevant info here
-                IJavaScriptExecutor js = (IJavaScriptExecutor) Driver;
+            do
+            {
+                IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
                 var newScrollHeight = (long)js.ExecuteScript("window.scrollTo(0, document.body.scrollHeight); return document.body.scrollHeight;");
                 if (newScrollHeight == scrollHeight) break;
                 else scrollHeight = newScrollHeight;
 
-                element = Driver.FindElement(By.XPath("/html/body/main/section[1]/button"));
-                Thread.Sleep(1000);
-                element.Click();
-                Thread.Sleep(1000);
+                try
+                {
+                    element = Driver.FindElement(By.XPath("/html/body/main/section[1]/button"));
+                    Thread.Sleep(1000);
+                    element.Click();
+                    Thread.Sleep(1000);
+                }
+                catch (OpenQA.Selenium.NoSuchElementException ex) { break; }
             } while (element != null);
 
-            //Get all results 
-            //Scrape all results
+            System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.XPath("/html/body/main/section[1]/ul/li"));
+
             //Cast all results to model object instances
-            //In a method return a collection of all the instances
+            foreach (IWebElement elm in JobCards)
+            {
+                string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
+                string[] splitInfo = elm.Text.Split("\r\n");
+                Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, splitInfo[4], splitInfo[3]);
+                JobResults.Add(holderJob);
+            }
         }
+
 
         public void setBaseSearchParams(string keywords, string city, string state)
         {

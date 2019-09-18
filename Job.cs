@@ -12,6 +12,7 @@ namespace LIHunter
         public string DatePosted { get; set; }
         public string DateApplied { get; set; }
         public string Link { get; set; }
+        public string Details { get; set; }
 
         /*
         public DateTime DatePosted { get; set; }
@@ -26,13 +27,14 @@ namespace LIHunter
             Location = location;
         }
 
-        public Job(string company, string position, string location, string link, string dateposted)
+        public Job(string company, string position, string location, string link, string dateposted, string details)
         {
             CompanyName = company;
             Position = position;
             Location = location;
             Link = link;
             DatePosted = dateposted;
+            Details = details;
         }
     }
 }
