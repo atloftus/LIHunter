@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
@@ -8,7 +9,7 @@ namespace LIHunter
 {
     public class LIService
     {
-        public const string ChromeDriverRelativePath = @"\Users\AlexanderLoftus\source\repos\LIHunter\chromedriver_win32\";
+        public string ChromeDriverRelativePath = (Directory.GetCurrentDirectory().Split("LIHunter"))[0] + @"\LIHunter\chromedriver_win32";
         public string UserName { get; set; }
         public string Password { get; set; }
 
@@ -22,7 +23,9 @@ namespace LIHunter
             //Construct search string
 
             //Initialize chromedriver
-            Driver = new ChromeDriver(@"C:\Users\AlexanderLoftus\Desktop\chromedriver_win32");
+            //Driver = new ChromeDriver(@"C:\Users\AlexanderLoftus\Desktop\chromedriver_win32");
+            Driver = new ChromeDriver(ChromeDriverRelativePath);
+            
             Driver.Navigate().GoToUrl("http:www.google.com");
             IWebElement element = Driver.FindElement(By.Name("q"));
             element.SendKeys("executeautomation");
