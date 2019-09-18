@@ -35,8 +35,8 @@ namespace LIHunter
 
         public LIService(string keywords, string city, string state, string[] jobtitles, string[] experiences, string timesposted)
         {
-            setBaseSearchParams("Software Engineer", "Chicago", "Illinois");
-            setAdvancedSearchParams(new string[1] {"contract" }, new string[1] { "entry" }, "day");
+            setBaseSearchParams(keywords, city, state);
+            setAdvancedSearchParams(jobtitles, experiences, timesposted);
             FULLURL = BaseURL + BaseSearchParams + AdvancedSearchParams;
             searchLI(FULLURL);
         }

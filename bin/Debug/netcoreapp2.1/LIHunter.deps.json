@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "2adfcacdfa464cd241735b970c1d4278898a6313"
+    "signature": "e58d1589d89a0e805cd3a9ea79cb6836ea669a3c"
   },
   "compilationOptions": {},
   "targets": {
@@ -10,6 +10,7 @@
         "dependencies": {
           "AlexP.Selenium.Chrome.WebDriver": "78.0.3904.11",
           "Chromium.ChromeDriver": "2.37.0",
+          "Google.Apis.Sheets.v4": "1.41.1.1705",
           "Microsoft.EntityFrameworkCore": "2.2.6",
           "Selenium.WebDriver": "3.141.0"
         },
@@ -19,6 +20,57 @@
       },
       "AlexP.Selenium.Chrome.WebDriver/78.0.3904.11": {},
       "Chromium.ChromeDriver/2.37.0": {},
+      "Google.Apis/1.41.1": {
+        "dependencies": {
+          "Google.Apis.Core": "1.41.1",
+          "Newtonsoft.Json": "10.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          }
+        }
+      },
+      "Google.Apis.Auth/1.41.1": {
+        "dependencies": {
+          "Google.Apis": "1.41.1",
+          "Google.Apis.Core": "1.41.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          },
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          }
+        }
+      },
+      "Google.Apis.Core/1.41.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {
+            "assemblyVersion": "1.41.1.0",
+            "fileVersion": "1.41.1.0"
+          }
+        }
+      },
+      "Google.Apis.Sheets.v4/1.41.1.1705": {
+        "dependencies": {
+          "Google.Apis": "1.41.1",
+          "Google.Apis.Auth": "1.41.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Sheets.v4.dll": {
+            "assemblyVersion": "1.41.1.1705",
+            "fileVersion": "1.41.1.1705"
+          }
+        }
+      },
       "Microsoft.CSharp/4.3.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
@@ -612,6 +664,34 @@
       "sha512": "sha512-p/5WFR9H4RN4/oTC4z1TWXVjJ94N+Tp9F5PBE5LcmGf17uh5Xvt9UkjyEnUgRPjMG+zHyDmBVxR6Zi0/1Npkqg==",
       "path": "chromium.chromedriver/2.37.0",
       "hashPath": "chromium.chromedriver.2.37.0.nupkg.sha512"
+    },
+    "Google.Apis/1.41.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/gNhxyiCY66ElHrOG0jMg6l13++PXFn69ULoeDabA92z4tCMzTBToY2XuuZhcxHzROcAjiVWPpj03ZEJl7s5kg==",
+      "path": "google.apis/1.41.1",
+      "hashPath": "google.apis.1.41.1.nupkg.sha512"
+    },
+    "Google.Apis.Auth/1.41.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zsb5QnQVDaeU4rTnYcRJead+obLEsi+iJH/T12+zUzu7/r5Pg6PD/I8RW7aG3qJ6TLyLpKDKDgm/IyQ6G4qOFg==",
+      "path": "google.apis.auth/1.41.1",
+      "hashPath": "google.apis.auth.1.41.1.nupkg.sha512"
+    },
+    "Google.Apis.Core/1.41.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6jZDk7VsnZGLXGREYdy+3v4Xvdtc6zJs9E4mkxmKC3d1B1NxK0fBX0Ir6/wFdmEt95cnoILRQVi2vNCisU6hIg==",
+      "path": "google.apis.core/1.41.1",
+      "hashPath": "google.apis.core.1.41.1.nupkg.sha512"
+    },
+    "Google.Apis.Sheets.v4/1.41.1.1705": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XH79aqyHqu5iclf0QIuiYL+tr104oIPetRAAMzBPO78XzzM9D06DSog7TG5vJbwyztRKHPNysmhxj8V9LRbLOg==",
+      "path": "google.apis.sheets.v4/1.41.1.1705",
+      "hashPath": "google.apis.sheets.v4.1.41.1.1705.nupkg.sha512"
     },
     "Microsoft.CSharp/4.3.0": {
       "type": "package",
