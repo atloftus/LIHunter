@@ -64,17 +64,22 @@ namespace LIHunter
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArguments("--incognito");
-            Driver = new ChromeDriver(ChromeDriverRelativePath, options);
-            
+            options.AddArguments("--disable-logging");
+            //options.AddArguments("log-level=3");
+
             string url;
 
             for (int counter = 0; counter<FULLURLS.Length; counter++)
             {
                 url = FULLURLS[counter];
                 OnlyGetEasyAppy = ((LIQuery)Queries[counter]).OnlyGetEasy;
+                OnlyGetEasyAppy = ((LIQuery)Queries[counter]).OnlyGetEasy;
+                Driver = new ChromeDriver(ChromeDriverRelativePath, options);
                 Driver.Navigate().GoToUrl(url);
                 IWebElement element;
                 long scrollHeight = 0;
+
+                Console.WriteLine("Searching for jobs with keyword " + ((LIQuery)Queries[counter]).KeyWords + " in the city of " + ((LIQuery)Queries[counter]).City + "...");
 
                 do
                 {
@@ -106,7 +111,8 @@ namespace LIHunter
                             {
                                 string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
                                 string[] splitInfo = elm.Text.Split("\r\n");
-                                string refid = ((link.Split("?refId="))[1]).Split("&position")[0];
+                                string[] refidSplit = ((link.Split("?refId="))[0]).Split("-");
+                                string refid = refidSplit[refidSplit.Length - 1];
                                 if (splitInfo.Length >= 5)
                                 {
                                     string dateposted = splitInfo[4].Replace("Easy Apply", "");
@@ -121,7 +127,8 @@ namespace LIHunter
                     {
                         string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
                         string[] splitInfo = elm.Text.Split("\r\n");
-                        string refid = "";
+                        string[] refidSplit = ((link.Split("?refId="))[0]).Split("-");
+                        string refid = refidSplit[refidSplit.Length - 1];
                         if (splitInfo.Length >= 5)
                         {
                             string dateposted = splitInfo[4].Replace("Easy Apply", "");
@@ -130,6 +137,8 @@ namespace LIHunter
                         }
                     }
                 }
+                Driver.Close();
+                Console.WriteLine("Completed Searching for jobs with keyword " + ((LIQuery)Queries[counter]).KeyWords + " in the city of " + ((LIQuery)Queries[counter]).City + "!");
             }
             getRidOfDuplicates();
             return JobResults;
@@ -138,8 +147,8 @@ namespace LIHunter
 
         public void getRidOfDuplicates()
         {
-            //List<Job> holder = (JobResults.ToArray()).GroupBy(x => x.RefID).Select(x => x.First()).ToList();
-            //JobResults = holder;
+            List<Job> holder = (JobResults.ToArray()).GroupBy(x => x.RefID).Select(x => x.First()).ToList();
+            JobResults = holder;
         }
 
 
@@ -193,12 +202,6 @@ namespace LIHunter
             if (timesposted.Contains("day")) AdvancedSearchParams += "&f_TP=1";
             else if (timesposted.Contains("month")) AdvancedSearchParams += "&f_TP=1%2C2";
             else if (timesposted.Contains("week")) AdvancedSearchParams += "&f_TP=1%2C2%2C3%2C4";
-        }
-
-
-        public void closeWindow()
-        {
-            Driver.Close();
         }
         #endregion
     }

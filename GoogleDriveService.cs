@@ -52,12 +52,20 @@ namespace LIHunter
         #region METHODS
         public string CreateGoogleSheetsJobEntries(List<Job> jobs)
         {
+            List<string> existingRfids = getExistingSheetJobRefIds();
             List<IList<object>> lineItems = new List<IList<object>>();
             List<object> lineHolder = new List<object>();
             foreach (Job job in jobs)
             {
-                lineHolder = new List<object>() { job.CompanyName, job.Location, job.Position, job.IsEasyApply, job.DatePosted, job.DateAddedToSheet, job.Details, job.Link, job.RefID };
-                lineItems.Add(lineHolder);
+                if (!(existingRfids.Contains(job.RefID)))
+                {
+                    lineHolder = new List<object>() { job.CompanyName, job.Location, job.Position, job.IsEasyApply, job.DatePosted, job.DateAddedToSheet, job.Details, job.Link, job.RefID };
+                    lineItems.Add(lineHolder);
+                } else
+                {
+                    var a = 1;
+                }
+                
             }
 
             var valueRange = new ValueRange();
@@ -68,6 +76,19 @@ namespace LIHunter
             return updateReponse.ToString();
         }
 
+
+        public List<string> getExistingSheetJobRefIds()
+        {
+            List<string> existingRfids = new List<string>();
+            SpreadsheetsResource.ValuesResource.GetRequest request = Service.Spreadsheets.Values.Get(SpreadsheetID, Range);
+            ValueRange response = request.Execute();
+            IList<IList<Object>> values = response.Values;
+            if (values != null && values.Count > 0)
+            {
+                foreach (var row in values) existingRfids.Add(row[8].ToString());
+            }
+            return existingRfids;
+        }
 
         public void ReadGoogleSheetsJobEntries()
         {

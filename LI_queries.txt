@@ -1,1 +1,2 @@
-Software Engineering.Madison.Wisconsin
+Software Engineering.Chicago.Illinois.fulltime.entry.week.false
+Software Engineering.Chicago.Illinois.fulltime|contract.entry|associate.week.false

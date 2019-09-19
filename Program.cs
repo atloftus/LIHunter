@@ -21,8 +21,7 @@ namespace LIHunter
             
             Console.WriteLine($"Searching for jobs...");
             List<Job> searchResults = linkedInService.searchLI();
-            Console.WriteLine("Completed LinkedIn Search!");
-            linkedInService.closeWindow();
+            Console.WriteLine("Completed all LinkedIn Searchs!");
 
             Console.WriteLine("Initializing Google Drive Service.");
             GoogleDriveService googleDriveService = new GoogleDriveService(searchResults);
