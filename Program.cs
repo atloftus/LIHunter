@@ -10,27 +10,18 @@ namespace LIHunter
     {
         static void Main(string[] args)
         {
+            string liInputFile = @"C:\Users\AlexanderLoftus\source\repos\LIHunter\LI_queries.txt";
+            List<object> queries = createLIQueries(liInputFile);
+
             Console.WriteLine("Welcome to LIHunter!");
 
-            //TODO: Add a user decision tree for basic info 
-            string keywords = "Software Engineering";
-            string city = "Chicago";
-            string state = "Illinois";
-
-            //TODO: Add logic for adding advanced info
-            //TODO: Add a user decision tree for advanced info 
-            string[] jobtitles = new string[1] { "fulltime" };
-            string[] experiences = new string[1] { "entry" };
-            string dateposted = "week";
-            bool onlygeteasy = true;
-
             Console.WriteLine("Initializing LinkedIn Service.");
-            LIService linkedInService = new LIService(keywords, city, state, jobtitles, experiences, dateposted, onlygeteasy);
+            LIService linkedInService = new LIService(queries);
             Console.WriteLine("Successfully initialized LinkedIn Service.");
-
-            Console.WriteLine($"Searching for {0} jobs in {1}...", keywords, city);
-            List<Job> searchResults = linkedInService.searchLI(linkedInService.FULLURL);
-            Console.WriteLine("Completed LinkedIn Search for {0} jobs in {1}!", keywords, city);
+            
+            Console.WriteLine($"Searching for jobs...");
+            List<Job> searchResults = linkedInService.searchLI();
+            Console.WriteLine("Completed LinkedIn Search!");
             linkedInService.closeWindow();
 
             Console.WriteLine("Initializing Google Drive Service.");
@@ -43,8 +34,45 @@ namespace LIHunter
 
             Console.WriteLine("Thank you for using LIHunter");
             Console.WriteLine("-----SESSION STATS-----");
-            //TODO: Add session stats here
+            Console.WriteLine("Number of Jobs Added to Sheet: " + searchResults.Count);
+            //TODO: Add more session stats here
+
         }
+
+
+        public static List<object> createLIQueries(string filepath)
+        {
+            string[] lines = File.ReadAllLines(filepath);
+            List<object> queries = new List<object>();
+
+            foreach (string line in lines)
+            {
+                string[] splitInput = line.Split('.');
+
+                if (splitInput.Length >= 3)
+                {
+                    if (splitInput.Length == 3)
+                    {
+                        LIQuery query = new LIQuery(splitInput[0], splitInput[1], splitInput[2]);
+                        queries.Add(query);
+                    }
+
+                    if (splitInput.Length == 7)
+                    {
+                        bool onlygeteasy = true;
+                        if ((splitInput[6].Contains('f')) || (splitInput[6].Contains('F'))) onlygeteasy = false;
+                        string[] jobtitles = splitInput[3].Split('|');
+                        string[] experiences = splitInput[4].Split('|');
+                        LIQueryAdvanced advquery = new LIQueryAdvanced(splitInput[0], splitInput[1], splitInput[2], jobtitles, experiences, splitInput[5], onlygeteasy);
+                        queries.Add(advquery);
+                    }
+                }
+            }
+            return queries;
+        }
+
+
+
 
     }
 }

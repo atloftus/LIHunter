@@ -9,4 +9,3 @@ C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.AssemblyInfo.cs
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.dll
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.pdb
-C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.csprojAssemblyReference.cache

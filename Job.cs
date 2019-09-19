@@ -16,19 +16,21 @@ namespace LIHunter
         public string Link { get; set; }
         public string Details { get; set; }
         public bool IsEasyApply { get; set; }
+        public string RefID { get; set; }
         #endregion
 
 
         #region CONSTRUCTORS
-        public Job(string company, string position, string location)
+        public Job(string company, string position, string location, string refid)
         {
             CompanyName = company;
             Position = position;
             Location = location;
+            RefID = refid;
         }
 
 
-        public Job(string company, string position, string location, string link, string dateposted, string details) : this(company, position, location)
+        public Job(string company, string position, string location, string refid, string link, string dateposted, string details) : this(company, position, location, refid)
         {
             Link = link;
             DatePosted = dateposted;
@@ -36,7 +38,7 @@ namespace LIHunter
         }
 
 
-        public Job(string company, string position, string location, string link, string dateposted, string details, bool iseasyapply) : this(company, position, location, link, dateposted, details)
+        public Job(string company, string position, string location, string refid, string link, string dateposted, string details, bool iseasyapply) : this(company, position, location, refid, link, dateposted, details)
         {
             IsEasyApply = iseasyapply;
         }

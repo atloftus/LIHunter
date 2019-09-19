@@ -19,7 +19,7 @@ namespace LIHunter
         static string ApplicationName = "LIHunter";
         GoogleCredential Credential { get; set; }
         public string Sheet { get; set; } = "LinkedIn";
-        public string Range { get; set; } = "LinkedIn!A2:H";
+        public string Range { get; set; } = "LinkedIn!A2:I";
         public string SpreadsheetID { get; set; } = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
         SheetsService Service { get; set; }
         public List<Job> Jobs { get; set; }
@@ -56,7 +56,7 @@ namespace LIHunter
             List<object> lineHolder = new List<object>();
             foreach (Job job in jobs)
             {
-                lineHolder = new List<object>() { job.CompanyName, job.Location, job.Position, job.IsEasyApply, job.DatePosted, job.DateAddedToSheet, job.Details, job.Link };
+                lineHolder = new List<object>() { job.CompanyName, job.Location, job.Position, job.IsEasyApply, job.DatePosted, job.DateAddedToSheet, job.Details, job.Link, job.RefID };
                 lineItems.Add(lineHolder);
             }
 

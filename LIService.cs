@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Linq;
 
 namespace LIHunter
 {
@@ -17,7 +18,8 @@ namespace LIHunter
         public string BaseURL { get { return @"https://www.linkedin.com/jobs/search?keywords="; } }
         public string BaseSearchParams { get; set; }
         public string AdvancedSearchParams { get; set; }
-        public string FULLURL { get; set; }
+        public string[] FULLURLS { get; set; }
+        public object[] Queries { get; set; }
         public IWebDriver Driver { get; set; }
         public List<Job> JobResults { get; set; } = new List<Job>();
         public bool OnlyGetEasyAppy { get; set; } = true;
@@ -25,17 +27,29 @@ namespace LIHunter
 
 
         #region CONSTRUCTORS
-        public LIService(string keywords, string city, string state)
+        public LIService(List<object> queries)
         {
-            setBaseSearchParams(keywords, city, state);
-            FULLURL = BaseURL + BaseSearchParams;
-        }
-
-        public LIService(string keywords, string city, string state, string[] jobtitles, string[] experiences, string timesposted, bool onlygeteasy) : this(keywords, city, state)
-        {
-            setAdvancedSearchParams(jobtitles, experiences, timesposted);
-            OnlyGetEasyAppy = onlygeteasy;
-            FULLURL += AdvancedSearchParams;
+            Queries = queries.ToArray();
+            FULLURLS = new string[queries.Count];
+            
+            for (int counter = 0; counter<Queries.Length; counter++)
+            {
+                object query = queries[counter];
+                if (query.GetType().Equals(typeof(LIQuery)))
+                {
+                    LIQuery q = (LIQuery)query;
+                    setBaseSearchParams(q.KeyWords, q.City, q.State);
+                    string url = BaseURL + BaseSearchParams;
+                    FULLURLS[counter] = url;
+                } else
+                {
+                    LIQueryAdvanced advq = (LIQueryAdvanced)query;
+                    setBaseSearchParams(advq.KeyWords, advq.City, advq.State);                   
+                    setAdvancedSearchParams(advq.JobTitles, advq.Experiences, advq.DatePosted);
+                    string url = BaseURL + BaseSearchParams + AdvancedSearchParams;
+                    FULLURLS[counter] = url;
+                }
+            }
         }
         #endregion
 
@@ -46,67 +60,86 @@ namespace LIHunter
         ///     to Job objects and returns them in a list.
         /// </summary>
         /// <param name="url"></param>
-        public List<Job> searchLI(string url)
+        public List<Job> searchLI()
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArguments("--incognito");
             Driver = new ChromeDriver(ChromeDriverRelativePath, options);
-            Driver.Navigate().GoToUrl(url);
+            
+            string url;
 
-            IWebElement element;
-            long scrollHeight = 0;
-
-            do
+            for (int counter = 0; counter<FULLURLS.Length; counter++)
             {
-                IJavaScriptExecutor js = (IJavaScriptExecutor)Driver;
-                var newScrollHeight = (long)js.ExecuteScript("window.scrollTo(0, document.body.scrollHeight); return document.body.scrollHeight;");
-                if (newScrollHeight == scrollHeight) break;
-                else scrollHeight = newScrollHeight;
+                url = FULLURLS[counter];
+                OnlyGetEasyAppy = ((LIQuery)Queries[counter]).OnlyGetEasy;
+                Driver.Navigate().GoToUrl(url);
+                IWebElement element;
+                long scrollHeight = 0;
 
-                try
+                do
                 {
-                    element = Driver.FindElement(By.XPath("/html/body/main/section[1]/button"));
-                    Thread.Sleep(1000);
-                    element.Click();
-                    Thread.Sleep(1000);
-                }
-                catch (OpenQA.Selenium.NoSuchElementException ex) { break; }
-            } while (element != null);
+                    IJavaScriptExecutor js = (IJavaScriptExecutor) Driver;
+                    var newScrollHeight = (long)js.ExecuteScript("window.scrollTo(0, document.body.scrollHeight); return document.body.scrollHeight;");
+                    if (newScrollHeight == scrollHeight) break;
+                    else scrollHeight = newScrollHeight;
 
-            System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.XPath("/html/body/main/section[1]/ul/li"));
-
-            foreach (IWebElement elm in JobCards)
-            {
-                if (OnlyGetEasyAppy)
-                {
                     try
                     {
-                        var easyApply = elm.FindElement(By.ClassName("job-result-card__easy-apply-label"));
-                        if (easyApply != null)
+                        element = Driver.FindElement(By.XPath("/html/body/main/section[1]/button"));
+                        Thread.Sleep(1000);
+                        element.Click();
+                        Thread.Sleep(1000);
+                    }
+                    catch (OpenQA.Selenium.NoSuchElementException ex) { break; }
+                } while (element != null);
+
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.XPath("/html/body/main/section[1]/ul/li"));
+
+                foreach (IWebElement elm in JobCards)
+                {
+                    if (OnlyGetEasyAppy)
+                    {
+                        try
                         {
-                            string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
-                            string[] splitInfo = elm.Text.Split("\r\n");
-                            if (splitInfo.Length >= 5)
+                            var easyApply = elm.FindElement(By.ClassName("job-result-card__easy-apply-label"));
+                            if (easyApply != null)
                             {
-                                string dateposted = splitInfo[4].Replace("Easy Apply", "");
-                                Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, dateposted, splitInfo[3], true);
-                                JobResults.Add(holderJob);
+                                string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
+                                string[] splitInfo = elm.Text.Split("\r\n");
+                                string refid = ((link.Split("?refId="))[1]).Split("&position")[0];
+                                if (splitInfo.Length >= 5)
+                                {
+                                    string dateposted = splitInfo[4].Replace("Easy Apply", "");
+                                    Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], refid, link, dateposted, splitInfo[3], true);
+                                    JobResults.Add(holderJob);
+                                }
                             }
                         }
+                        catch (OpenQA.Selenium.NoSuchElementException ex) { }
                     }
-                    catch (OpenQA.Selenium.NoSuchElementException ex) { }
-                } else
-                {
-                    string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
-                    string[] splitInfo = elm.Text.Split("\r\n");
-                    if (splitInfo.Length >= 5)
+                    else
                     {
-                        Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, splitInfo[4], splitInfo[3], false);
-                        JobResults.Add(holderJob);
+                        string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
+                        string[] splitInfo = elm.Text.Split("\r\n");
+                        string refid = "";
+                        if (splitInfo.Length >= 5)
+                        {
+                            string dateposted = splitInfo[4].Replace("Easy Apply", "");
+                            Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], refid, link, dateposted, splitInfo[3], false);
+                            JobResults.Add(holderJob);
+                        }
                     }
                 }
             }
+            getRidOfDuplicates();
             return JobResults;
+        }
+
+
+        public void getRidOfDuplicates()
+        {
+            //List<Job> holder = (JobResults.ToArray()).GroupBy(x => x.RefID).Select(x => x.First()).ToList();
+            //JobResults = holder;
         }
 
 
