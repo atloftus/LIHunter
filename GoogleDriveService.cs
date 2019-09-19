@@ -18,10 +18,11 @@ namespace LIHunter
         static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         static string ApplicationName = "LIHunter";
         GoogleCredential Credential { get; set; }
-        string Sheet { get; set; }
-        string Range { get; set; }
-        string SpreadsheetID { get; set; }
+        public string Sheet { get; set; } = "Sheet1";
+        public string Range { get; set; } = "Sheet1!A3:F";
+        public string SpreadsheetID { get; set; } = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
         SheetsService Service { get; set; }
+        public List<Job> Jobs { get; set; }
         #endregion
 
 
@@ -30,88 +31,45 @@ namespace LIHunter
         {
             using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
             {
-                Credential = GoogleCredential.FromStream(stream).CreateScoped(Scopes);
+                this.Credential = GoogleCredential.FromStream(stream).CreateScoped(Scopes);
             }
 
-
-            string sheet = "Sheet1";
-            var range = $"{sheet}!A3:F";
-            string spreadsheetId = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
-
-            SheetsService service = new SheetsService(new BaseClientService.Initializer()
+            this.Service = new SheetsService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = Credential,
+                HttpClientInitializer = this.Credential,
                 ApplicationName = ApplicationName,
             });
-
-            CreateGoogleSheetsJobEntries(Credential);
-            ReadGoogleSheetsJobEntries(Credential);
         }
 
 
-
-        public GoogleDriveService(List<Job> jobs)
+        public GoogleDriveService(List<Job> jobs) : this()
         {
-            using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
-            {
-                Credential = GoogleCredential.FromStream(stream).CreateScoped(Scopes);
-            }
-
-
-            string sheet = "Sheet1";
-            var range = $"{sheet}!A3:F";
-            string spreadsheetId = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
-
-            SheetsService service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = Credential,
-                ApplicationName = ApplicationName,
-            });
-
-            //TODO: Need to be able to pass in Job objects to write to google sheets
-            CreateGoogleSheetsJobEntries(Credential);
-            //ReadGoogleSheetsJobEntries(Credential);
+            Jobs = jobs;
         }
         #endregion
 
 
         #region METHODS
-        public static void CreateGoogleSheetsJobEntries(GoogleCredential credential)
+        public string CreateGoogleSheetsJobEntries(List<Job> jobs)
         {
-            string sheet = "Sheet1";
-            var range = $"{sheet}!A3:F";
-            string spreadsheetId = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
-
-            SheetsService service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
+            //TODO: Figure out how to write Job objects to google sheets
+            var oblist = new List<object>() { "Hello!", "This", "was", "insertd", "via", "C#" };
 
             var valueRange = new ValueRange();
-            var oblist = new List<object>() { "Hello!", "This", "was", "insertd", "via", "C#" };
             valueRange.Values = new List<IList<object>> { oblist };
 
-            var appendRequest = service.Spreadsheets.Values.Append(valueRange, spreadsheetId, range);
+            var appendRequest = Service.Spreadsheets.Values.Append(valueRange, SpreadsheetID, Range);
             appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
             var appendReponse = appendRequest.Execute();
-            //Helpful link: https://www.twilio.com/blog/2017/03/google-spreadsheets-and-net-core.html?utm_source=youtube&utm_medium=video&utm_campaign=google-sheets-dotnet
+
+            //TODO: Change this to the response status from teh googel sheets update
+            return "";
         }
 
 
-        public static void ReadGoogleSheetsJobEntries(GoogleCredential credential)
+        public void ReadGoogleSheetsJobEntries()
         {
-            string sheet = "Sheet1";
-            var range = $"{sheet}!A3:F";
-            string spreadsheetId = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
-
-            SheetsService service = new SheetsService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
-
-            SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadsheetId, range);
+            SpreadsheetsResource.ValuesResource.GetRequest request = Service.Spreadsheets.Values.Get(SpreadsheetID, Range);
 
             ValueRange response = request.Execute();
             IList<IList<Object>> values = response.Values;

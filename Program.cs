@@ -25,8 +25,12 @@ namespace LIHunter
             List<Job> searchResults = linkedInService.searchLI(linkedInService.FULLURL);
             Console.WriteLine("Completed LinkedIn Search for {0} jobs in {1}!", keywords, city);
 
-            Console.WriteLine("Writing search results to your google sheet...");
+            Console.WriteLine("Initializing Google Drive Service.");
             GoogleDriveService googleDriveService = new GoogleDriveService();
+            Console.WriteLine("Successfully initialized Google Drive Service.");
+
+            Console.WriteLine("Writing search results to your google sheet...");
+            string updateResponse = googleDriveService.CreateGoogleSheetsJobEntries(googleDriveService.Jobs);
             Console.WriteLine("Completed writing results to google sheets with a status of...");
 
             Console.WriteLine("Thank you for using LIHunter");
