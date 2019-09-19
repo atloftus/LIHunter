@@ -10,27 +10,24 @@ namespace LIHunter
 {
     public class LIService
     {
+        #region PROPERTIES
         public string ChromeDriverRelativePath = (Directory.GetCurrentDirectory().Split("LIHunter"))[0] + @"\LIHunter\chromedriver_win32";
         public string UserName { get; set; }
         public string Password { get; set; }
-        public string BaseURL { get {return @"https://www.linkedin.com/jobs/search?keywords=";}}
+        public string BaseURL { get { return @"https://www.linkedin.com/jobs/search?keywords="; } }
         public string BaseSearchParams { get; set; }
         public string AdvancedSearchParams { get; set; }
         public string FULLURL { get; set; }
         public IWebDriver Driver { get; set; }
         public List<Job> JobResults { get; set; } = new List<Job>();
+        #endregion
 
 
+        #region CONSTRUCTORS
         public LIService(string keywords, string city, string state)
         {
-            //TODO: Replace the static string with dynamic values 
-            /*
-            setBaseSearchParams("Software Engineer", "Chicago", "Illinois");
-            setAdvancedSearchParams(new string[1] {"contract" }, new string[1] { "entry" }, "day");
-            */
-            setBaseSearchParams("Software Engineer", "Chicago", "Illinois");
+            setBaseSearchParams(keywords, city, state);
             FULLURL = BaseURL + BaseSearchParams;
-            searchLI(FULLURL);
         }
 
         public LIService(string keywords, string city, string state, string[] jobtitles, string[] experiences, string timesposted)
@@ -38,11 +35,17 @@ namespace LIHunter
             setBaseSearchParams(keywords, city, state);
             setAdvancedSearchParams(jobtitles, experiences, timesposted);
             FULLURL = BaseURL + BaseSearchParams + AdvancedSearchParams;
-            searchLI(FULLURL);
         }
+        #endregion
 
 
-        public void searchLI(string url)
+        #region METHODS 
+        /// <summary>
+        ///     This method takes in a string url and searches LinkedIn with it. It then scraps all of the jobs it finds and casts them
+        ///     to Job objects and returns them in a list.
+        /// </summary>
+        /// <param name="url"></param>
+        public List<Job> searchLI(string url)
         {
             Driver = new ChromeDriver(ChromeDriverRelativePath);
             Driver.Navigate().GoToUrl(url);
@@ -69,7 +72,6 @@ namespace LIHunter
 
             System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.XPath("/html/body/main/section[1]/ul/li"));
 
-            //Cast all results to model object instances
             foreach (IWebElement elm in JobCards)
             {
                 string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
@@ -77,20 +79,34 @@ namespace LIHunter
                 Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, splitInfo[4], splitInfo[3]);
                 JobResults.Add(holderJob);
             }
+
+            return JobResults;
         }
 
 
+        /// <summary>
+        ///     This method adds teh required params to the search params for LinkedIn.
+        /// </summary>
+        /// <param name="keywords"></param>
+        /// <param name="city"></param>
+        /// <param name="state"></param>
         public void setBaseSearchParams(string keywords, string city, string state)
         {
             string keywordsWithoutSpaces = keywords.Replace(" ", "%20");
-            BaseSearchParams = keywordsWithoutSpaces + "&location=" + city + "%2C%20" + state + "%2C%20United%20States&";//[&f_JT=(F for full time and F%2CC for contract)][&f_E=(2 for entry and 2%2C3 entry and associate][&f_TP=1(nothing for day, %2C2 for week, %2C2%2C3%2C4 for month)]
+            BaseSearchParams = keywordsWithoutSpaces + "&location=" + city + "%2C%20" + state + "%2C%20United%20States&";
         }
 
 
+        /// <summary>
+        ///     This method adds the not required search params to the LinkedIn search url.
+        /// </summary>
+        /// <param name="jobtitles"></param>
+        /// <param name="experiences"></param>
+        /// <param name="timesposted"></param>
         public void setAdvancedSearchParams(string[] jobtitles, string[] experiences, string timesposted)
         {
             int counter = 0;
-            foreach(string job in jobtitles)
+            foreach (string job in jobtitles)
             {
                 if (counter == 0) AdvancedSearchParams += "&f_JT=";
                 else AdvancedSearchParams += "%2";
@@ -119,5 +135,6 @@ namespace LIHunter
             else if (timesposted.Contains("week")) AdvancedSearchParams += "&f_TP=1";
             else AdvancedSearchParams += "&f_TP=1";
         }
+        #endregion
     }
 }

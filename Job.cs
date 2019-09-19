@@ -6,6 +6,7 @@ namespace LIHunter
 {
     public class Job
     {
+        #region PROPERTIES
         public string CompanyName { get; set; }
         public string Position { get; set; }
         public string Location { get; set; }
@@ -18,14 +19,17 @@ namespace LIHunter
         public DateTime DatePosted { get; set; }
         public DateTime DateApplied { get; set; }
         */
+        #endregion
 
 
+        #region CONSTRUCTORS
         public Job(string company, string position, string location)
         {
             CompanyName = company;
             Position = position;
             Location = location;
         }
+
 
         public Job(string company, string position, string location, string link, string dateposted, string details)
         {
@@ -36,5 +40,6 @@ namespace LIHunter
             DatePosted = dateposted;
             Details = details;
         }
+        #endregion
     }
 }
