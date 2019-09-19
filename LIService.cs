@@ -20,6 +20,7 @@ namespace LIHunter
         public string FULLURL { get; set; }
         public IWebDriver Driver { get; set; }
         public List<Job> JobResults { get; set; } = new List<Job>();
+        public bool OnlyGetEasyAppy { get; set; } = true;
         #endregion
 
 
@@ -30,11 +31,11 @@ namespace LIHunter
             FULLURL = BaseURL + BaseSearchParams;
         }
 
-        public LIService(string keywords, string city, string state, string[] jobtitles, string[] experiences, string timesposted)
+        public LIService(string keywords, string city, string state, string[] jobtitles, string[] experiences, string timesposted, bool onlygeteasy) : this(keywords, city, state)
         {
-            setBaseSearchParams(keywords, city, state);
             setAdvancedSearchParams(jobtitles, experiences, timesposted);
-            FULLURL = BaseURL + BaseSearchParams + AdvancedSearchParams;
+            OnlyGetEasyAppy = onlygeteasy;
+            FULLURL += AdvancedSearchParams;
         }
         #endregion
 
@@ -47,7 +48,9 @@ namespace LIHunter
         /// <param name="url"></param>
         public List<Job> searchLI(string url)
         {
-            Driver = new ChromeDriver(ChromeDriverRelativePath);
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments("--incognito");
+            Driver = new ChromeDriver(ChromeDriverRelativePath, options);
             Driver.Navigate().GoToUrl(url);
 
             IWebElement element;
@@ -74,18 +77,41 @@ namespace LIHunter
 
             foreach (IWebElement elm in JobCards)
             {
-                string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
-                string[] splitInfo = elm.Text.Split("\r\n");
-                Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, splitInfo[4], splitInfo[3]);
-                JobResults.Add(holderJob);
+                if (OnlyGetEasyAppy)
+                {
+                    try
+                    {
+                        var easyApply = elm.FindElement(By.ClassName("job-result-card__easy-apply-label"));
+                        if (easyApply != null)
+                        {
+                            string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
+                            string[] splitInfo = elm.Text.Split("\r\n");
+                            if (splitInfo.Length >= 5)
+                            {
+                                string dateposted = splitInfo[4].Replace("Easy Apply", "");
+                                Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, dateposted, splitInfo[3], true);
+                                JobResults.Add(holderJob);
+                            }
+                        }
+                    }
+                    catch (OpenQA.Selenium.NoSuchElementException ex) { }
+                } else
+                {
+                    string link = elm.FindElement(By.TagName("a")).GetAttribute("href");
+                    string[] splitInfo = elm.Text.Split("\r\n");
+                    if (splitInfo.Length >= 5)
+                    {
+                        Job holderJob = new Job(splitInfo[1], splitInfo[0], splitInfo[2], link, splitInfo[4], splitInfo[3], false);
+                        JobResults.Add(holderJob);
+                    }
+                }
             }
-
             return JobResults;
         }
 
 
         /// <summary>
-        ///     This method adds teh required params to the search params for LinkedIn.
+        ///     This method adds the required params to the search params for LinkedIn.
         /// </summary>
         /// <param name="keywords"></param>
         /// <param name="city"></param>
@@ -131,9 +157,15 @@ namespace LIHunter
                 counter++;
             }
 
-            if (timesposted.Contains("month")) AdvancedSearchParams += "&f_TP=1";
-            else if (timesposted.Contains("week")) AdvancedSearchParams += "&f_TP=1";
-            else AdvancedSearchParams += "&f_TP=1";
+            if (timesposted.Contains("day")) AdvancedSearchParams += "&f_TP=1";
+            else if (timesposted.Contains("month")) AdvancedSearchParams += "&f_TP=1%2C2";
+            else if (timesposted.Contains("week")) AdvancedSearchParams += "&f_TP=1%2C2%2C3%2C4";
+        }
+
+
+        public void closeWindow()
+        {
+            Driver.Close();
         }
         #endregion
     }

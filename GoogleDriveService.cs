@@ -15,11 +15,11 @@ namespace LIHunter
     public class GoogleDriveService
     {
         #region PROPERTIES
-        static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        static string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static string ApplicationName = "LIHunter";
         GoogleCredential Credential { get; set; }
-        public string Sheet { get; set; } = "Sheet1";
-        public string Range { get; set; } = "Sheet1!A3:F";
+        public string Sheet { get; set; } = "LinkedIn";
+        public string Range { get; set; } = "LinkedIn!A2:H";
         public string SpreadsheetID { get; set; } = "1Q70wUYzkFZcPbrF0ttrzffIlrEzlBfYH58pKx4x0nbY";
         SheetsService Service { get; set; }
         public List<Job> Jobs { get; set; }
@@ -52,18 +52,20 @@ namespace LIHunter
         #region METHODS
         public string CreateGoogleSheetsJobEntries(List<Job> jobs)
         {
-            //TODO: Figure out how to write Job objects to google sheets
-            var oblist = new List<object>() { "Hello!", "This", "was", "insertd", "via", "C#" };
+            List<IList<object>> lineItems = new List<IList<object>>();
+            List<object> lineHolder = new List<object>();
+            foreach (Job job in jobs)
+            {
+                lineHolder = new List<object>() { job.CompanyName, job.Location, job.Position, job.IsEasyApply, job.DatePosted, job.DateAddedToSheet, job.Details, job.Link };
+                lineItems.Add(lineHolder);
+            }
 
             var valueRange = new ValueRange();
-            valueRange.Values = new List<IList<object>> { oblist };
-
+            valueRange.Values = lineItems;
             var appendRequest = Service.Spreadsheets.Values.Append(valueRange, SpreadsheetID, Range);
             appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-            var appendReponse = appendRequest.Execute();
-
-            //TODO: Change this to the response status from teh googel sheets update
-            return "";
+            var updateReponse = appendRequest.Execute();
+            return updateReponse.ToString();
         }
 
 

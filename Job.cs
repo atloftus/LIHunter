@@ -12,13 +12,10 @@ namespace LIHunter
         public string Location { get; set; }
         public string DatePosted { get; set; }
         public string DateApplied { get; set; }
+        public string DateAddedToSheet { get => DateTime.Now.ToString(); }
         public string Link { get; set; }
         public string Details { get; set; }
-
-        /*
-        public DateTime DatePosted { get; set; }
-        public DateTime DateApplied { get; set; }
-        */
+        public bool IsEasyApply { get; set; }
         #endregion
 
 
@@ -31,14 +28,17 @@ namespace LIHunter
         }
 
 
-        public Job(string company, string position, string location, string link, string dateposted, string details)
+        public Job(string company, string position, string location, string link, string dateposted, string details) : this(company, position, location)
         {
-            CompanyName = company;
-            Position = position;
-            Location = location;
             Link = link;
             DatePosted = dateposted;
             Details = details;
+        }
+
+
+        public Job(string company, string position, string location, string link, string dateposted, string details, bool iseasyapply) : this(company, position, location, link, dateposted, details)
+        {
+            IsEasyApply = iseasyapply;
         }
         #endregion
     }
