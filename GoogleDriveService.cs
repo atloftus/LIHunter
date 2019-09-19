@@ -61,11 +61,7 @@ namespace LIHunter
                 {
                     lineHolder = new List<object>() { job.CompanyName, job.Location, job.Position, job.IsEasyApply, job.DatePosted, job.DateAddedToSheet, job.Details, job.Link, job.RefID };
                     lineItems.Add(lineHolder);
-                } else
-                {
-                    var a = 1;
-                }
-                
+                }                 
             }
 
             var valueRange = new ValueRange();
@@ -73,7 +69,7 @@ namespace LIHunter
             var appendRequest = Service.Spreadsheets.Values.Append(valueRange, SpreadsheetID, Range);
             appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
             var updateReponse = appendRequest.Execute();
-            return updateReponse.ToString();
+            return lineItems.Count.ToString();
         }
 
 

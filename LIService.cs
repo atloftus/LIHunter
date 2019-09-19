@@ -64,8 +64,6 @@ namespace LIHunter
         {
             ChromeOptions options = new ChromeOptions();
             options.AddArguments("--incognito");
-            options.AddArguments("--disable-logging");
-            //options.AddArguments("log-level=3");
 
             string url;
 

@@ -33,9 +33,8 @@ namespace LIHunter
 
             Console.WriteLine("Thank you for using LIHunter");
             Console.WriteLine("-----SESSION STATS-----");
-            Console.WriteLine("Number of Jobs Added to Sheet: " + searchResults.Count);
-            //TODO: Add more session stats here
-
+            Console.WriteLine("Number of Jobs Found: " + searchResults.Count);
+            Console.WriteLine("Number of new Jobs Added to Sheet: " + updateResponse);
         }
 
 
