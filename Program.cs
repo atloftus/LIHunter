@@ -25,11 +25,13 @@ namespace LIHunter
             
             stopwatch.Start();
             Console.WriteLine("Welcome to LIHunter! Initializing LinkedIn Service...");
-            Hunters.LIService linkedInService = new Hunters.LIService();
+            //Hunters.LIService linkedInService = new Hunters.LIService();
+            Hunters.INService indeedService = new Hunters.INService();
             Console.WriteLine("Successfully initialized LinkedIn Service.");
             
             Console.WriteLine($"Searching for jobs...");
-            List<Hunters.Job> searchResults = linkedInService.searchLI();
+            //List<Hunters.Job> searchResults = linkedInService.searchLI();
+            List<Hunters.Job> searchResults = indeedService.searchIN();
             Console.WriteLine("Completed all LinkedIn Searchs!");
 
             Console.WriteLine("Initializing Google Drive Service...");
@@ -37,7 +39,8 @@ namespace LIHunter
             Console.WriteLine("Successfully initialized Google Drive Service.");
 
             Console.WriteLine("Writing search results to your google sheet...");
-            string updateResponse = googleDriveService.CreateGoogleSheetsJobEntries(googleDriveService.Jobs);
+            //string updateResponse = googleDriveService.CreateGoogleSheetsJobEntries(googleDriveService.Jobs);
+            string updateResponse = googleDriveService.CreateGoogleSheetsINJobEntries(googleDriveService.Jobs);
             Console.WriteLine("Completed writing results to google sheets.");
             stopwatch.Stop();
 
