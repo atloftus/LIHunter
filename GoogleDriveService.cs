@@ -13,7 +13,7 @@ using Google.Apis.Util.Store;
 namespace LIHunter
 {
     /// <summary>
-    /// 
+    ///     This class allows reading and writing to a google sheet.
     /// </summary>
     public class GoogleDriveService
     {
@@ -31,15 +31,13 @@ namespace LIHunter
 
         #region CONSTRUCTORS
         /// <summary>
-        /// 
+        ///     This is the default constructor for the GoogleDriveService class that creates the Google credential and SheetsService.
         /// </summary>
         public GoogleDriveService()
         {
             string currentDirectory = Directory.GetCurrentDirectory();
             var directorySplit = currentDirectory.Split("LIHunter");
             var secretLocation = directorySplit[0] + "client_secrets.json";
-
-            //using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
 
             using (var stream = new FileStream(secretLocation, FileMode.Open, FileAccess.Read))
             {
@@ -55,7 +53,8 @@ namespace LIHunter
 
 
         /// <summary>
-        /// 
+        ///     This is an accessory constructor that entends the default constructor and tkaes in a list of Jobs and puts them
+        ///     in the Job property of this class.
         /// </summary>
         /// <param name="jobs"></param>
         public GoogleDriveService(List<Job> jobs) : this()
@@ -67,7 +66,7 @@ namespace LIHunter
 
         #region METHODS
         /// <summary>
-        /// 
+        ///     This method takes in a list of jobs and writes each one as a line item in a google sheet.
         /// </summary>
         /// <param name="jobs"></param>
         /// <returns></returns>
@@ -95,7 +94,7 @@ namespace LIHunter
 
 
         /// <summary>
-        /// 
+        ///     This method returns all of the refids that already exist in the home google sheet.
         /// </summary>
         /// <returns></returns>
         public List<string> getExistingSheetJobRefIds()
@@ -106,22 +105,6 @@ namespace LIHunter
             IList<IList<Object>> values = response.Values;
             if (values != null) foreach (var row in values) existingRfids.Add(row[8].ToString());
             return existingRfids;
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ReadGoogleSheetsJobEntries()
-        {
-            SpreadsheetsResource.ValuesResource.GetRequest request = Service.Spreadsheets.Values.Get(SpreadsheetID, Range);
-            ValueRange response = request.Execute();
-            IList<IList<Object>> values = response.Values;
-            List<Job> existingJobs = new List<Job>();
-
-            //TODO: Change this to correctly cast to a job object
-            foreach (var row in values) existingJobs.Add(new Job((string)row[0], (string)row[1], (string)row[2], (string)row[3]));
-            Console.Read();
         }
         #endregion
     }

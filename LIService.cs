@@ -7,15 +7,18 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Linq;
 
+
 namespace LIHunter
 {
     /// <summary>
-    /// 
+    ///     This class is responsible for creating the search urls, performing the subsequent search, and serializing teh results into a list 
+    ///     of job objects that can be written to Google Sheets later.
     /// </summary>
     public class LIService
     {
         #region PROPERTIES
         public string ChromeDriverRelativePath = (Directory.GetCurrentDirectory().Split("LIHunter"))[0] + @"\LIHunter\chromedriver_win32";
+        public string LIQueriesRelativePath = (Directory.GetCurrentDirectory().Split("LIHunter"))[0] + @"LIHunter\LI_queries.txt";
         public string UserName { get; set; }
         public string Password { get; set; }
         public string BaseURL { get { return @"https://www.linkedin.com/jobs/search?keywords="; } }
@@ -31,11 +34,12 @@ namespace LIHunter
 
         #region CONSTRUCTORS
         /// <summary>
-        /// 
+        ///     This primary accessory constructor takes in a list of queries and constructs their search url and creates a LIQuery object for each url.
         /// </summary>
         /// <param name="queries"></param>
-        public LIService(List<object> queries)
+        public LIService()
         {
+            List<object> queries = createLIQueries();
             Queries = queries.ToArray();
             FULLURLS = new string[queries.Count];
             
@@ -62,6 +66,40 @@ namespace LIHunter
 
 
         #region METHODS 
+        /// <summary>
+        ///     This method reads the input text file and makes LIQueries for each line in the file.
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
+        public List<object> createLIQueries()
+        {
+            string[] lines = File.ReadAllLines(LIQueriesRelativePath);
+            List<object> queries = new List<object>();
+
+            foreach (string line in lines)
+            {
+                string[] splitInput = line.Split('.');
+
+                if (splitInput.Length == 3)
+                {
+                    LIQuery query = new LIQuery(splitInput[0], splitInput[1], splitInput[2]);
+                    queries.Add(query);
+                }
+
+                if (splitInput.Length == 7)
+                {
+                    bool onlygeteasy = true;
+                    if ((splitInput[6].Contains('f')) || (splitInput[6].Contains('F'))) onlygeteasy = false;
+                    string[] jobtitles = splitInput[3].Split('|');
+                    string[] experiences = splitInput[4].Split('|');
+                    LIQueryAdvanced advquery = new LIQueryAdvanced(splitInput[0], splitInput[1], splitInput[2], jobtitles, experiences, splitInput[5], onlygeteasy);
+                    queries.Add(advquery);
+                }
+            }
+            return queries;
+        }
+
+
         /// <summary>
         ///     This method takes in a string url and searches LinkedIn with it. It then scraps all of the jobs it finds and casts them
         ///     to Job objects and returns them in a list.
@@ -123,7 +161,12 @@ namespace LIHunter
                     }
                 } while (element != null);
 
-                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.XPath("/html/body/main/section[1]/ul/li"));
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.CssSelector("body > main > div > section > ul > li"));
+                if (JobCards.Count == 0)
+                {
+                    Thread.Sleep(5000);
+                    JobCards = Driver.FindElements(By.CssSelector("body > main > div > section > ul > li"));
+                }
 
                 foreach (IWebElement elm in JobCards)
                 {
@@ -162,7 +205,7 @@ namespace LIHunter
                         }
                     }
                 }
-                //Driver.Close();
+                Driver.Close();
                 Console.WriteLine("Completed Searching for jobs with keyword " + ((LIQuery)Queries[counter]).KeyWords + " in the city of " + ((LIQuery)Queries[counter]).City + "!");
             }
             getRidOfDuplicates();
@@ -171,7 +214,7 @@ namespace LIHunter
 
 
         /// <summary>
-        /// 
+        ///     This method goes through the JobResults property of this class and gets rid of all duplicate entries.
         /// </summary>
         public void getRidOfDuplicates()
         {

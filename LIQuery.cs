@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace LIHunter
 {
     /// <summary>
-    /// 
+    ///     This class contains all of the properties of a basic LinkedIN Query.
     /// </summary>
     public class LIQuery
     {
@@ -20,13 +21,13 @@ namespace LIHunter
 
         #region CONSTRUCTORS
         /// <summary>
-        /// 
+        ///     This is the default constructor that doesn't do anyhting.
         /// </summary>
         public LIQuery() { }
 
 
         /// <summary>
-        /// 
+        ///     This is the accessory constructor that sets the keywords, city and state correctly. 
         /// </summary>
         /// <param name="keywords"></param>
         /// <param name="city"></param>
@@ -43,7 +44,7 @@ namespace LIHunter
 
 
     /// <summary>
-    /// 
+    ///     This class contains all of the properties of an Advanced LinkedIN Query.
     /// </summary>
     public class LIQueryAdvanced : LIQuery
     {
@@ -57,13 +58,14 @@ namespace LIHunter
 
         #region CONSTRUCTORS
         /// <summary>
-        /// 
+        ///     This is the default constructor that doesn't do anyhting.
         /// </summary>
         public LIQueryAdvanced() { }
 
 
         /// <summary>
-        /// 
+        ///     This is the advanced construtor that extends the base LIQuery constructor as well as takingi n and setting the advanced search parameters that
+        ///     are the differentiating factors between LIQuery and LIQueryAdvanced.
         /// </summary>
         /// <param name="keywords"></param>
         /// <param name="city"></param>
