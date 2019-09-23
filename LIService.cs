@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace LIHunter
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LIService
     {
         #region PROPERTIES
@@ -27,6 +30,10 @@ namespace LIHunter
 
 
         #region CONSTRUCTORS
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="queries"></param>
         public LIService(List<object> queries)
         {
             Queries = queries.ToArray();
@@ -74,6 +81,7 @@ namespace LIHunter
                 OnlyGetEasyAppy = ((LIQuery)Queries[counter]).OnlyGetEasy;
                 Driver = new ChromeDriver(ChromeDriverRelativePath, options);
                 Driver.Navigate().GoToUrl(url);
+                Thread.Sleep(2000);
                 IWebElement element;
                 long scrollHeight = 0;
 
@@ -88,12 +96,31 @@ namespace LIHunter
 
                     try
                     {
+                        Thread.Sleep(1000);
                         element = Driver.FindElement(By.XPath("/html/body/main/section[1]/button"));
                         Thread.Sleep(1000);
                         element.Click();
                         Thread.Sleep(1000);
                     }
-                    catch (OpenQA.Selenium.NoSuchElementException ex) { break; }
+                    catch (OpenQA.Selenium.NoSuchElementException ex) {
+                        try
+                        {
+                            element = Driver.FindElement(By.ClassName("see-more-jobs"));
+                            Thread.Sleep(1000);
+                            element.Click();
+                            Thread.Sleep(1000);
+                        }
+                        catch (OpenQA.Selenium.NoSuchElementException ex2) {
+                            try
+                            {
+                                element = Driver.FindElement(By.CssSelector("body > main > div > section > button"));
+                                Thread.Sleep(1000);
+                                element.Click();
+                                Thread.Sleep(1000);
+                            }
+                            catch (OpenQA.Selenium.NoSuchElementException ex3) { break; }
+                        }
+                    }
                 } while (element != null);
 
                 System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> JobCards = Driver.FindElements(By.XPath("/html/body/main/section[1]/ul/li"));
@@ -135,7 +162,7 @@ namespace LIHunter
                         }
                     }
                 }
-                Driver.Close();
+                //Driver.Close();
                 Console.WriteLine("Completed Searching for jobs with keyword " + ((LIQuery)Queries[counter]).KeyWords + " in the city of " + ((LIQuery)Queries[counter]).City + "!");
             }
             getRidOfDuplicates();
@@ -143,6 +170,9 @@ namespace LIHunter
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void getRidOfDuplicates()
         {
             List<Job> holder = (JobResults.ToArray()).GroupBy(x => x.RefID).Select(x => x.First()).ToList();

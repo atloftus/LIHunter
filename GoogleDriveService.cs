@@ -12,6 +12,9 @@ using Google.Apis.Util.Store;
 
 namespace LIHunter
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class GoogleDriveService
     {
         #region PROPERTIES
@@ -27,9 +30,18 @@ namespace LIHunter
 
 
         #region CONSTRUCTORS
+        /// <summary>
+        /// 
+        /// </summary>
         public GoogleDriveService()
         {
-            using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
+            string currentDirectory = Directory.GetCurrentDirectory();
+            var directorySplit = currentDirectory.Split("LIHunter");
+            var secretLocation = directorySplit[0] + "client_secrets.json";
+
+            //using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
+
+            using (var stream = new FileStream(secretLocation, FileMode.Open, FileAccess.Read))
             {
                 this.Credential = GoogleCredential.FromStream(stream).CreateScoped(Scopes);
             }
@@ -42,6 +54,10 @@ namespace LIHunter
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jobs"></param>
         public GoogleDriveService(List<Job> jobs) : this()
         {
             Jobs = jobs;
@@ -50,6 +66,11 @@ namespace LIHunter
 
 
         #region METHODS
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jobs"></param>
+        /// <returns></returns>
         public string CreateGoogleSheetsJobEntries(List<Job> jobs)
         {
             List<string> existingRfids = getExistingSheetJobRefIds();
@@ -73,38 +94,33 @@ namespace LIHunter
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<string> getExistingSheetJobRefIds()
         {
             List<string> existingRfids = new List<string>();
             SpreadsheetsResource.ValuesResource.GetRequest request = Service.Spreadsheets.Values.Get(SpreadsheetID, Range);
             ValueRange response = request.Execute();
             IList<IList<Object>> values = response.Values;
-            if (values != null && values.Count > 0)
-            {
-                foreach (var row in values) existingRfids.Add(row[8].ToString());
-            }
+            if (values != null) foreach (var row in values) existingRfids.Add(row[8].ToString());
             return existingRfids;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void ReadGoogleSheetsJobEntries()
         {
             SpreadsheetsResource.ValuesResource.GetRequest request = Service.Spreadsheets.Values.Get(SpreadsheetID, Range);
-
             ValueRange response = request.Execute();
             IList<IList<Object>> values = response.Values;
-            if (values != null && values.Count > 0)
-            {
-                Console.WriteLine("Name, Major");
-                foreach (var row in values)
-                {
-                    // Print columns A and E, which correspond to indices 0 and 4.
-                    Console.WriteLine("{0}, {1}", row[0], row[4]);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No data found.");
-            }
+            List<Job> existingJobs = new List<Job>();
+
+            //TODO: Change this to correctly cast to a job object
+            foreach (var row in values) existingJobs.Add(new Job((string)row[0], (string)row[1], (string)row[2], (string)row[3]));
             Console.Read();
         }
         #endregion

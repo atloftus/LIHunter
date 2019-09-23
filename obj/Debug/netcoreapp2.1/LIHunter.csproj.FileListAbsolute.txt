@@ -1,7 +1,6 @@
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.csproj.CoreCompileInputs.cache
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.AssemblyInfoInputs.cache
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.AssemblyInfo.cs
-C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\client_secrets.json
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\LIHunter.deps.json
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\LIHunter.runtimeconfig.json
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\LIHunter.runtimeconfig.dev.json
@@ -9,3 +8,4 @@ C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\LIHunter.
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\LIHunter.pdb
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.dll
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.pdb
+C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.csprojAssemblyReference.cache

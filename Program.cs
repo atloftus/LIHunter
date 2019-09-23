@@ -10,7 +10,9 @@ namespace LIHunter
     {
         static void Main(string[] args)
         {
-            string liInputFile = @"C:\Users\AlexanderLoftus\source\repos\LIHunter\LI_queries.txt";
+            string currentDirectory = Directory.GetCurrentDirectory();
+            var directorySplit = currentDirectory.Split("LIHunter");
+            string liInputFile = directorySplit[0] + @"LIHunter\LI_queries.txt";
             List<object> queries = createLIQueries(liInputFile);
 
             Console.WriteLine("Welcome to LIHunter!");
