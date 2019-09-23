@@ -51,7 +51,7 @@
           "lib/netstandard2.0/Google.Apis.Core.dll": {}
         }
       },
-      "Google.Apis.Sheets.v4/1.41.1.1705": {
+      "Google.Apis.Sheets.v4/1.41.1.1721": {
         "type": "package",
         "dependencies": {
           "Google.Apis": "1.41.1",
@@ -1258,15 +1258,15 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "Google.Apis.Sheets.v4/1.41.1.1705": {
-      "sha512": "XH79aqyHqu5iclf0QIuiYL+tr104oIPetRAAMzBPO78XzzM9D06DSog7TG5vJbwyztRKHPNysmhxj8V9LRbLOg==",
+    "Google.Apis.Sheets.v4/1.41.1.1721": {
+      "sha512": "OChMbjYcGeKXiEwYiFqssAqPu50MavJZJ0lDDN0EkCRCoOz6UMDnKCVxX3RDogIWJ5RQn8xgrkK8zz3/ri9S7A==",
       "type": "package",
-      "path": "google.apis.sheets.v4/1.41.1.1705",
+      "path": "google.apis.sheets.v4/1.41.1.1721",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "google.apis.sheets.v4.1.41.1.1705.nupkg.sha512",
+        "google.apis.sheets.v4.1.41.1.1721.nupkg.sha512",
         "google.apis.sheets.v4.nuspec",
         "lib/net40/Google.Apis.Sheets.v4.dll",
         "lib/net40/Google.Apis.Sheets.v4.pdb",
@@ -4558,7 +4558,7 @@
     ".NETCoreApp,Version=v2.1": [
       "AlexP.Selenium.Chrome.WebDriver >= 78.0.3904.11",
       "Chromium.ChromeDriver >= 2.37.0",
-      "Google.Apis.Sheets.v4 >= 1.41.1.1705",
+      "Google.Apis.Sheets.v4 >= 1.41.1.1721",
       "Microsoft.EntityFrameworkCore >= 2.2.6",
       "Microsoft.NETCore.App >= 2.1.0",
       "Selenium.WebDriver >= 3.141.0"
@@ -4618,7 +4618,7 @@
           },
           "Google.Apis.Sheets.v4": {
             "target": "Package",
-            "version": "[1.41.1.1705, )"
+            "version": "[1.41.1.1721, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",

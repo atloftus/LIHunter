@@ -53,7 +53,7 @@
             },
             "Google.Apis.Sheets.v4": {
               "target": "Package",
-              "version": "[1.41.1.1705, )"
+              "version": "[1.41.1.1721, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

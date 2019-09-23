@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Hunters;
 
 
 namespace LIHunter
@@ -21,17 +22,18 @@ namespace LIHunter
         static void Main(string[] args)
         {
             Stopwatch stopwatch = new Stopwatch();
+            
             stopwatch.Start();
             Console.WriteLine("Welcome to LIHunter! Initializing LinkedIn Service...");
-            LIService linkedInService = new LIService();
+            Hunters.LIService linkedInService = new Hunters.LIService();
             Console.WriteLine("Successfully initialized LinkedIn Service.");
             
             Console.WriteLine($"Searching for jobs...");
-            List<Job> searchResults = linkedInService.searchLI();
+            List<Hunters.Job> searchResults = linkedInService.searchLI();
             Console.WriteLine("Completed all LinkedIn Searchs!");
 
             Console.WriteLine("Initializing Google Drive Service...");
-            GoogleDriveService googleDriveService = new GoogleDriveService(searchResults);
+            Hunters.GoogleDriveService googleDriveService = new Hunters.GoogleDriveService(searchResults);
             Console.WriteLine("Successfully initialized Google Drive Service.");
 
             Console.WriteLine("Writing search results to your google sheet...");
@@ -42,6 +44,7 @@ namespace LIHunter
             Console.WriteLine("Thank you for using LIHunter!");
             Console.WriteLine("-----SESSION STATS-----");           
             Console.WriteLine("Number of Jobs Found: " + searchResults.Count);
+            Console.WriteLine("Number of new Jobs added to the Google Sheet: " + updateResponse);
             Console.WriteLine("Application Run Time: {0:mm\\:ss}", stopwatch.Elapsed);
             Console.WriteLine("-----------------------");
         }

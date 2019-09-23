@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "e58d1589d89a0e805cd3a9ea79cb6836ea669a3c"
+    "signature": "eb4d71f6bedfc3db38fcfff90671860d4f236997"
   },
   "compilationOptions": {},
   "targets": {
@@ -10,9 +10,10 @@
         "dependencies": {
           "AlexP.Selenium.Chrome.WebDriver": "78.0.3904.11",
           "Chromium.ChromeDriver": "2.37.0",
-          "Google.Apis.Sheets.v4": "1.41.1.1705",
+          "Google.Apis.Sheets.v4": "1.41.1.1721",
           "Microsoft.EntityFrameworkCore": "2.2.6",
-          "Selenium.WebDriver": "3.141.0"
+          "Selenium.WebDriver": "3.141.0",
+          "Hunters": "1.0.0.0"
         },
         "runtime": {
           "LIHunter.dll": {}
@@ -59,15 +60,15 @@
           }
         }
       },
-      "Google.Apis.Sheets.v4/1.41.1.1705": {
+      "Google.Apis.Sheets.v4/1.41.1.1721": {
         "dependencies": {
           "Google.Apis": "1.41.1",
           "Google.Apis.Auth": "1.41.1"
         },
         "runtime": {
           "lib/netstandard2.0/Google.Apis.Sheets.v4.dll": {
-            "assemblyVersion": "1.41.1.1705",
-            "fileVersion": "1.41.1.1705"
+            "assemblyVersion": "1.41.1.1721",
+            "fileVersion": "1.41.1.1721"
           }
         }
       },
@@ -642,6 +643,14 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
         }
+      },
+      "Hunters/1.0.0.0": {
+        "runtime": {
+          "Hunters.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -686,12 +695,12 @@
       "path": "google.apis.core/1.41.1",
       "hashPath": "google.apis.core.1.41.1.nupkg.sha512"
     },
-    "Google.Apis.Sheets.v4/1.41.1.1705": {
+    "Google.Apis.Sheets.v4/1.41.1.1721": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-XH79aqyHqu5iclf0QIuiYL+tr104oIPetRAAMzBPO78XzzM9D06DSog7TG5vJbwyztRKHPNysmhxj8V9LRbLOg==",
-      "path": "google.apis.sheets.v4/1.41.1.1705",
-      "hashPath": "google.apis.sheets.v4.1.41.1.1705.nupkg.sha512"
+      "sha512": "sha512-OChMbjYcGeKXiEwYiFqssAqPu50MavJZJ0lDDN0EkCRCoOz6UMDnKCVxX3RDogIWJ5RQn8xgrkK8zz3/ri9S7A==",
+      "path": "google.apis.sheets.v4/1.41.1.1721",
+      "hashPath": "google.apis.sheets.v4.1.41.1.1721.nupkg.sha512"
     },
     "Microsoft.CSharp/4.3.0": {
       "type": "package",
@@ -1133,6 +1142,11 @@
       "sha512": "sha512-lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "Hunters/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
