@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Hunters;
 using Killers;
-
+using System.Threading.Tasks;
 
 namespace LIHunter
 {
@@ -85,6 +85,8 @@ namespace LIHunter
 
             Console.WriteLine("Applying to jobs...");
             int[] results = liKiller.applyToJobs();
+            Console.WriteLine("Number of SUCCESSful applications on LinkedIn: " + results[0]);
+            Console.WriteLine("Number of FAILed applications on LinkedIn: " + results[1]);
             Console.WriteLine("Completed all LinkedIn Searchs!");
 
             Console.WriteLine("Initializing Google Drive Service...");
@@ -113,10 +115,6 @@ namespace LIHunter
         {
             //TODO: Finish this method
         }
-
-
-
-
 
 
 
