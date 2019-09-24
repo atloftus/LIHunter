@@ -92,7 +92,7 @@ namespace LIHunter
             Console.WriteLine("Successfully initialized Google Drive Service.");
 
             Console.WriteLine("Writing application results to your google sheet...");
-            //TODO: need to add calls to udpdate present entries
+            //TODO: Need to add calls to udpdate present entries
             string updateResponse = googleDriveService.CreateGoogleSheetsLIJobEntries(googleDriveService.Jobs);
             Console.WriteLine("Completed writing results to google sheets.");
             stopwatch.Stop();
