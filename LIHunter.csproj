@@ -17,6 +17,9 @@
     <Reference Include="Hunters">
       <HintPath>..\Hunters\bin\Debug\netstandard2.0\Hunters.dll</HintPath>
     </Reference>
+    <Reference Include="Killers">
+      <HintPath>..\Killers\bin\Debug\netstandard2.0\Killers.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
