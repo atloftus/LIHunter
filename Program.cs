@@ -21,17 +21,32 @@ namespace LIHunter
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            Console.Write("Would you like to update Indeed(y/n)? ");
+            string inInput = Console.ReadLine();
+            Console.Write("Would you like to update LinkedIn(y/n)? ");
+            string liInput = Console.ReadLine();
+
+            if ((inInput.Contains('y')) && (liInput.Contains('y'))) runBoth();
+            else if (inInput.Contains('y')) runIndeed();
+            else if (liInput.Contains('y')) runLinkedIn();
+                               
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void runLinkedIn()
+        {
             Stopwatch stopwatch = new Stopwatch();
-            
             stopwatch.Start();
+
             Console.WriteLine("Welcome to LIHunter! Initializing LinkedIn Service...");
-            //Hunters.LIService linkedInService = new Hunters.LIService();
-            Hunters.INService indeedService = new Hunters.INService();
+            Hunters.LIService linkedInService = new Hunters.LIService();
             Console.WriteLine("Successfully initialized LinkedIn Service.");
-            
+
             Console.WriteLine($"Searching for jobs...");
-            //List<Hunters.Job> searchResults = linkedInService.searchLI();
-            List<Hunters.Job> searchResults = indeedService.searchIN();
+            List<Hunters.Job> searchResults = linkedInService.searchLI();
             Console.WriteLine("Completed all LinkedIn Searchs!");
 
             Console.WriteLine("Initializing Google Drive Service...");
@@ -39,17 +54,60 @@ namespace LIHunter
             Console.WriteLine("Successfully initialized Google Drive Service.");
 
             Console.WriteLine("Writing search results to your google sheet...");
-            //string updateResponse = googleDriveService.CreateGoogleSheetsJobEntries(googleDriveService.Jobs);
-            string updateResponse = googleDriveService.CreateGoogleSheetsINJobEntries(googleDriveService.Jobs);
+            string updateResponse = googleDriveService.CreateGoogleSheetsLIJobEntries(googleDriveService.Jobs);
             Console.WriteLine("Completed writing results to google sheets.");
             stopwatch.Stop();
 
             Console.WriteLine("Thank you for using LIHunter!");
-            Console.WriteLine("-----SESSION STATS-----");           
-            Console.WriteLine("Number of Jobs Found: " + searchResults.Count);
+            Console.WriteLine("-----SESSION STATS-----");
+            Console.WriteLine("Number of Jobs Found on LinkedIn: " + searchResults.Count);
             Console.WriteLine("Number of new Jobs added to the Google Sheet: " + updateResponse);
             Console.WriteLine("Application Run Time: {0:mm\\:ss}", stopwatch.Elapsed);
             Console.WriteLine("-----------------------");
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void runIndeed()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            Console.WriteLine("Welcome to INHunter! Initializing Indeed Service...");
+            Hunters.INService indeedService = new Hunters.INService();
+            Console.WriteLine("Successfully initialized Indeed Service.");
+
+            Console.WriteLine($"Searching for jobs...");
+            List<Hunters.Job> searchResults = indeedService.searchIN();
+            Console.WriteLine("Completed all Indeed Searchs!");
+
+            Console.WriteLine("Initializing Google Drive Service...");
+            Hunters.GoogleDriveService googleDriveService = new Hunters.GoogleDriveService(searchResults);
+            Console.WriteLine("Successfully initialized Google Drive Service.");
+
+            Console.WriteLine("Writing search results to your google sheet...");
+            string updateResponse = googleDriveService.CreateGoogleSheetsINJobEntries(googleDriveService.Jobs);
+            Console.WriteLine("Completed writing results to google sheets.");
+            stopwatch.Stop();
+
+            Console.WriteLine("Thank you for using INHunter!");
+            Console.WriteLine("-----SESSION STATS-----");
+            Console.WriteLine("Number of Jobs Found on Indeed: " + searchResults.Count);
+            Console.WriteLine("Number of new Jobs added to the Google Sheet: " + updateResponse);
+            Console.WriteLine("Application Run Time: {0:mm\\:ss}", stopwatch.Elapsed);
+            Console.WriteLine("-----------------------");
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void runBoth()
+        {
+            runLinkedIn();
+            runIndeed();
         }
     }
 }
