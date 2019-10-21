@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace LIHunter
 {
     /// <summary>
-    ///     This class is the main porgram class for thsi .Net Core Desktop application thats promary purpose is to hold
+    ///     This class is the main porgram class for this .Net Core Desktop application thats promary purpose is to hold
     ///     the main method.
     /// </summary>
     class Program
