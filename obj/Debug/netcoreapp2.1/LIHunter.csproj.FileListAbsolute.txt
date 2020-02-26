@@ -7,6 +7,7 @@ C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\Hunters.d
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\Killers.dll
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\Hunters.pdb
 C:\Users\AlexanderLoftus\source\repos\LIHunter\bin\Debug\netcoreapp2.1\Killers.pdb
+C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.csprojAssemblyReference.cache
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.AssemblyInfoInputs.cache
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.AssemblyInfo.cs
 C:\Users\AlexanderLoftus\source\repos\LIHunter\obj\Debug\netcoreapp2.1\LIHunter.csproj.CopyComplete
