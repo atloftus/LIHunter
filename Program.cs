@@ -26,7 +26,8 @@ namespace LIHunter
             Console.Write("Would you like to hunt jobs(y/n)? ");
             string huntInput = Console.ReadLine();
             Console.Write("Would you like to kill jobs(y/n)? ");
-            string killInput = Console.ReadLine();
+            //string killInput = Console.ReadLine();
+            string killInput = "n";
 
             if ((huntInput.Contains('y')) && (killInput.Contains('y'))) runAll();
             else if (huntInput.Contains('y')) huntJobs();
