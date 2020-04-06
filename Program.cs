@@ -22,7 +22,7 @@ namespace LIHunter
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Console.Write("Welcome to the Application Manger 2020!");
+            Console.Write("Welcome to the Application Manger 2020! (Fuck COVID-19 lol)");
             Console.Write("Would you like to hunt jobs (y/n)? ");
             string huntInput = Console.ReadLine();
             Console.Write("Would you like to kill jobs (y/n)? ");
